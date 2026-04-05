@@ -39,9 +39,15 @@
 - accuracy
 
 Результат получился следующий:
-     precision   recall   f1-score   support
-0       0.83      0.79      0.81        19
-1       0.80      0.84      0.82        19
+Для negative:
+precision = 0.83 
+recall = 0.79
+f1-score = 0.81
+
+Для negative:
+precision = 0.8 
+recall = 0.84
+f1-score = 0.82
 
 accuracy = 0.82
 
