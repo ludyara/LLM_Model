@@ -20,7 +20,7 @@ def llm_model():
         df["text"],
         df["label_num"],
         test_size=0.2,
-        stratify=df["label_num"],  # ВАЖНО!
+        stratify=df["label_num"],
         random_state=42
     )
 
@@ -39,3 +39,10 @@ def llm_model():
 
     print("\nРезультаты на тесте:\n")
     print(classification_report(y_test, y_pred))
+
+    print("\nПримеры предсказаний:\n")
+
+    for text, true, pred in zip(X_test.tolist(), y_test.tolist(), y_pred.tolist()):
+        print(f"Текст: {text}")
+        print(f"Реально: {true} | Предсказано: {pred}")
+        print("-" * 50)
