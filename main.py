@@ -1,16 +1,14 @@
-# This is a sample Python script.
+from Parsing import parse_reviews, save_to_csv
+from LLM_model import llm_model
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+if __name__ == "__main__":
+    # сайт с отзывами
+    URL = "https://otzovik.com/reviews/kompaniya_biznes-yurist_russia_sankt-peterburg"
 
+    # Парсим сайт чтобы вытащить текст отзывов
+    reviews = parse_reviews(URL, max_pages=3)
+    # сохраняем в csv
+    save_to_csv(reviews)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # Производим обучение модели и выводим результат
+    llm_model()
