@@ -1,36 +1,33 @@
-import requests
-from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+import time
 import pandas as pd
 
 
-def parse_reviews(url, max_pages=5):
+def parse_reviews(url, max_pages=3):
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+    driver.get(url)
+    time.sleep(15)  # время на капчу
+
     reviews = []
 
-    for page in range(1, max_pages + 1):
-        page_url = f"{url}?page={page}"
-        response = requests.get(page_url)
+    # ищем элементы
+    elements = driver.find_elements(By.CSS_SELECTOR, "a.review-title")
 
-        if response.status_code != 200:
-            print(f"Ошибка на странице {page}")
-            continue
+    print(f"Найдено: {len(elements)} отзывов")
 
-        soup = BeautifulSoup(response.text, "html.parser")
+    for el in elements:
+        text = el.text.strip()
+        if text:
+            reviews.append({
+                "text": text,
+                "label": "positive"
+            })
 
-        # Ищем отзывы по структуре
-        review_tags = soup.find_all("h3")
-
-        for tag in review_tags:
-            a_tag = tag.find("a", class_="review-title")
-            if a_tag:
-                text = a_tag.get_text(strip=True)
-                if text:
-                    reviews.append({
-                        "text": text,
-                        "label": "positive"  # по умолчанию
-                    })
-
-        print(f"Страница {page} обработана")
-
+    driver.quit()
     return reviews
 
 
